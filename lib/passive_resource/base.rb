@@ -13,7 +13,7 @@ module PassiveResource
       elsif self.class.collection?(p)
         @seedling = self.class.many(p)
       else
-        raise InvalidSeedlingException, "A hash like object or a collection of hash like objects is required"
+        raise PassiveResource::InvalidSeedlingException, "A hash like object or a collection of hash like objects is required"
       end
     end
   
