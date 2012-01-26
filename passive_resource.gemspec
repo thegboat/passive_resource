@@ -2,6 +2,7 @@
 $:.push File.expand_path("../lib", __FILE__)
 require "passive_resource/version"
 require "passive_resource/base"
+require "passive_resource/error"
 
 Gem::Specification.new do |s|
   s.name        = "passive_resource"

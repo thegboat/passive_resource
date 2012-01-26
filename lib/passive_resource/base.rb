@@ -2,22 +2,29 @@ module PassiveResource
   class Base
     require 'active_support/core_ext/hash/indifferent_access'
     require 'active_support/json'
+    require 'rest_client'
   
     HASH_METHODS = (ActiveSupport::HashWithIndifferentAccess.new.methods - Object.new.methods)
   
     def initialize(p = {})
       p = load_from_url(p) if p.is_a?(String)
-      @seedling = ActiveSupport::HashWithIndifferentAccess.new(p)
+      if self.class.nestable?(p)
+        @seedling = ActiveSupport::HashWithIndifferentAccess.new(p)
+      elsif self.class.collection?(p)
+        @seedling = self.class.many(p)
+      else
+        raise InvalidSeedlingException, "A hash like object or a collection of hash like objects is required"
+      end
     end
   
-    def seed
+    def seedling
       @seedling
     end
   
     def [](key)
       if self.class.nestable?(@seedling[key])
         @seedling[key] = self.class.new(@seedling[key])
-      elsif self.class.enumerable?(@seedling[key])
+      elsif self.class.collection?(@seedling[key])
         @seedling[key] = self.class.many(@seedling[key])
       end
       @seedling[key]
@@ -45,16 +52,14 @@ module PassiveResource
     
     def load_from_url(url)
       rtn = RestClient.get(url)
-      @seedling = JSON.parse(rtn)
+      JSON.parse(rtn)
     end
-  
-    private
 
     def self.nestable?(obj)
       ['ActiveSupport::HashWithIndifferentAccess', 'HashWithIndifferentAccess', 'Hash'].include?(obj.class.to_s)
     end
   
-    def self.enumerable?(obj)
+    def self.collection?(obj)
       ['Array', 'WillPaginate::Collection'].include?(obj.class.to_s)
     end
   end
