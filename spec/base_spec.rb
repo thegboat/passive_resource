@@ -19,6 +19,16 @@ describe PassiveResource::Base, "#new" do
     instance = PassiveResource::Base.new(:cities => [{:city => 'Orlando'}, {:city => 'Greenwood'}])
     instance.cities.all? {|item| item.is_a?(PassiveResource::Base)}.should eq(true)
   end
+  
+  it "should respond to Hash methods" do
+    instance = PassiveResource::Base.new(:name => 'grady')
+    PassiveResource::Base::HASH_METHODS.all? {|m| instance.respond_to?(m)}.should eq(true)
+  end
+  
+  it "should respond to created methods" do
+    instance = PassiveResource::Base.new(:name => 'grady')
+    instance.respond_to?(name).should eq(true)
+  end
 end
   
 describe PassiveResource::Base, "#seedling" do
@@ -32,5 +42,12 @@ describe PassiveResource::Base, "#many" do
   it "should return a collection of PassiveResource::Base objects" do
     instances = PassiveResource::Base.many(:cities => [{:city => 'Orlando'}, {:city => 'Greenwood'}])
     instances.all? {|item| item.is_a?(PassiveResource::Base)}.should eq(true)
+  end
+end
+
+describe PassiveResource::Base, "#inspect" do
+  it "should return the seedling to_s" do
+    instance = PassiveResource::Base.new(:name => 'grady')
+    instances.inspect.should eq("{\"grady\"=>\"name\"}")
   end
 end

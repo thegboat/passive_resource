@@ -20,6 +20,12 @@ module PassiveResource
     def seedling
       @seedling
     end
+    
+    def respond_to?(method)
+      return true if super
+      accessor = method.to_s.gsub(/\=$/,'')
+      @seedling.has_key?(accessor) or HASH_METHODS.include?(method)
+    end
   
     def [](key)
       if self.class.nestable?(@seedling[key])
