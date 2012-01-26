@@ -23,11 +23,11 @@ Gem::Specification.new do |s|
   # s.add_development_dependency "rspec"
   # s.add_runtime_dependency "rest-client"
   if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-    s.add_dependency("active_support", '~> 2.3')
+    s.add_dependency("activesupport", '> 2.3')
     s.add_dependency "rest-client"
     s.add_dependency "rspec"
   else
-    s.add_runtime_dependency("active_support", '~> 2.3')
+    s.add_runtime_dependency("activesupport", '> 2.3')
     s.add_runtime_dependency "rest-client"
     s.add_development_dependency "rspec"
   end
