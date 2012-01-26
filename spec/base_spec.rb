@@ -27,7 +27,7 @@ describe PassiveResource::Base, "#new" do
   
   it "should respond to created methods" do
     instance = PassiveResource::Base.new(:name => 'grady')
-    instance.respond_to?(name).should eq(true)
+    instance.respond_to?('name').should eq(true)
   end
 end
   
@@ -48,6 +48,6 @@ end
 describe PassiveResource::Base, "#inspect" do
   it "should return the seedling to_s" do
     instance = PassiveResource::Base.new(:name => 'grady')
-    instances.inspect.should eq("{\"grady\"=>\"name\"}")
+    instance.inspect.should eq("{\"name\"=>\"grady\"}")
   end
 end

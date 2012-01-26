@@ -21,6 +21,10 @@ module PassiveResource
       @seedling
     end
     
+    def id
+      seedling.has_key?('id') ? seedling['id'] : super
+    end
+    
     def respond_to?(method)
       return true if super
       accessor = method.to_s.gsub(/\=$/,'')

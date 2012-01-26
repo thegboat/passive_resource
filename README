@@ -1,0 +1,46 @@
+Use passive resource to create on instances from hashes especially from third party apis.
+Allows for the ability place hash manipulation logic in one neat place
+
+Examples:
+
+used with a hash or hash like object
+> require 'passive_resource'
+=> true 
+> class NewClass < PassiveResource::Base
+> def whole_name; "#{first_name} #{last_name}" end
+>   end
+=> nil 
+> instance = NewClass.new(:first_name => 'grady', :last_name => 'griffin')
+=> {"first_name"=>"grady", "last_name"=>"griffin"} 
+> instance.first_name
+=> "grady"
+> instance.whole_name
+=> "grady griffin"
+
+
+Used as with an api returning json
+
+> class FacebookProfile < PassiveResource::Base
+>  end
+=> nil
+> facebook = FacebookProfile.new('https://graph.facebook.com/19292868552')
+ => {"id"=>"19292868552", "name"=>"Facebook Platform", "picture"=>"http://profile.ak.fbcdn.net/hprofile-ak-ash2/276791_19292868552_1958181823_s.jpg", "link"=>"http://www.facebook.com/platform", "likes"=>3923792, "category"=>"Product/service", "website"=>"http://developers.facebook.com", "username"=>"platform", "founded"=>"2007", "company_overview"=>"Facebook Platform enables anyone to build social apps on Facebook and the web.", "mission"=>"To make the web more open and social.", "about"=>"We're building the social web. Get the latest here: developers.facebook.com ", "talking_about_count"=>74536}
+> facebook.talking_about_count
+=> 74536 
+> facebook.founded
+=> "2007"
+
+Works with code that was previously using hashes
+
+> facebook['talking_about_count']
+ => 74536 
+> facebook[:founded]
+ => "2007"
+ 
+Objects are nested automatically
+> instance = NewClass.new(:locations => [{:city => 'Orlando', :state => "FL"}, {:city => 'Greenwood', :state => "SC"}])
+ => {"locations"=>[{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}]} 
+> instance.locations
+ => [{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}] 
+> instance.locations.first.city
+ => "Orlando"
