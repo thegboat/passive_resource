@@ -27,19 +27,11 @@ module PassiveResource
       @seedling.has_key?(accessor) or HASH_METHODS.include?(method)
     end
   
-    def [](*args)
-      args = args.flatten
-      if args.empty?
-        raise ArgumentError, "wrong number of arguments"
-      end
-      key = args.shift
-      if args.empt
+    def [](key)
       if self.class.nestable?(@seedling[key])
         @seedling[key] = self.class.new(@seedling[key])
       elsif self.class.collection?(@seedling[key])
         @seedling[key] = self.class.many(@seedling[key])
-      elsif self.class.callable?(args)
-        @seedling[key].call(args)
       else
         @seedling[key]
       end
