@@ -27,13 +27,22 @@ module PassiveResource
       @seedling.has_key?(accessor) or HASH_METHODS.include?(method)
     end
   
-    def [](key)
+    def [](*args)
+      args = args.flatten
+      if args.empty?
+        raise ArgumentError, "wrong number of arguments"
+      end
+      key = args.shift
+      if args.empt
       if self.class.nestable?(@seedling[key])
         @seedling[key] = self.class.new(@seedling[key])
       elsif self.class.collection?(@seedling[key])
         @seedling[key] = self.class.many(@seedling[key])
+      elsif self.class.callable?(args)
+        @seedling[key].call(args)
+      else
+        @seedling[key]
       end
-      @seedling[key]
     end
   
     def self.many(ary)
@@ -67,6 +76,10 @@ module PassiveResource
   
     def self.collection?(obj)
       ['Array', 'WillPaginate::Collection'].include?(obj.class.to_s)
+    end
+    
+    def self.callable?(obj)
+      ['Proc'].include?(obj.class.to_s)
     end
   end
 end

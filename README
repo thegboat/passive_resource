@@ -5,15 +5,19 @@ Examples:
 
 used with a hash or hash like object
 > require 'passive_resource'
-=> true 
+=> true
+
 > class NewClass < PassiveResource::Base
 > def whole_name; "#{first_name} #{last_name}" end
 >   end
-=> nil 
+=> nil
+ 
 > instance = NewClass.new(:first_name => 'grady', :last_name => 'griffin')
-=> {"first_name"=>"grady", "last_name"=>"griffin"} 
+=> {"first_name"=>"grady", "last_name"=>"griffin"}
+ 
 > instance.first_name
 => "grady"
+
 > instance.whole_name
 => "grady griffin"
 
@@ -23,24 +27,54 @@ Used as with an api returning json
 > class FacebookProfile < PassiveResource::Base
 >  end
 => nil
+
 > facebook = FacebookProfile.new('https://graph.facebook.com/19292868552')
- => {"id"=>"19292868552", "name"=>"Facebook Platform", "picture"=>"http://profile.ak.fbcdn.net/hprofile-ak-ash2/276791_19292868552_1958181823_s.jpg", "link"=>"http://www.facebook.com/platform", "likes"=>3923792, "category"=>"Product/service", "website"=>"http://developers.facebook.com", "username"=>"platform", "founded"=>"2007", "company_overview"=>"Facebook Platform enables anyone to build social apps on Facebook and the web.", "mission"=>"To make the web more open and social.", "about"=>"We're building the social web. Get the latest here: developers.facebook.com ", "talking_about_count"=>74536}
+=> {"id"=>"19292868552", "name"=>"Facebook Platform", "picture"=>"http://profile.ak.fbcdn.net/hprofile-ak-ash2/276791_19292868552_1958181823_s.jpg", "link"=>"http://www.facebook.com/platform", "likes"=>3923792, "category"=>"Product/service", "website"=>"http://developers.facebook.com", "username"=>"platform", "founded"=>"2007", "company_overview"=>"Facebook Platform enables anyone to build social apps on Facebook and the web.", "mission"=>"To make the web more open and social.", "about"=>"We're building the social web. Get the latest here: developers.facebook.com ", "talking_about_count"=>74536}
+ 
 > facebook.talking_about_count
-=> 74536 
+=> 74536
+
 > facebook.founded
 => "2007"
 
 Works with code that was previously using hashes
 
 > facebook['talking_about_count']
- => 74536 
+=> 74536
+  
 > facebook[:founded]
- => "2007"
+=> "2007"
  
 Objects are nested automatically
 > instance = NewClass.new(:locations => [{:city => 'Orlando', :state => "FL"}, {:city => 'Greenwood', :state => "SC"}])
- => {"locations"=>[{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}]} 
+=> {"locations"=>[{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}]}
+
 > instance.locations
- => [{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}] 
+=> [{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}]
+
 > instance.locations.first.city
- => "Orlando"
+=> "Orlando"
+
+the many method can be use for collections
+
+> array = NewClass.many([{:city => 'Orlando', :state => "FL"}, {:city => 'Greenwood', :state => "SC"}])
+=> [{"city"=>"Orlando", "state"=>"FL"}, {"city"=>"Greenwood", "state"=>"SC"}]
+
+> array.first.city
+=> "Orlando"
+
+The key/value interface can be used to add methods
+> empty = NewClass.new({})
+=> {}
+ 
+> empty.some_method
+NoMethodError: undefined method `some_method' for {}:NewClass
+        from /usr/local/rvm/gems/ruby-1.9.3-p0/gems/passive_resource-0.0.1/lib/passive_resource/base.rb:55:in `method_missing'
+        from (irb):6
+        from /usr/local/rvm/rubies/ruby-1.9.3-p0/bin/irb:16:in `<main>'
+
+> empty['some_method'] = 56
+=> 56
+ 
+> empty.some_method
+=> 56
