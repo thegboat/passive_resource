@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = PassiveResource::VERSION
   s.authors     = ["Grady Griffin"]
   s.email       = ["gradyg@izea.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/thegboat/passive_resource"
   s.summary     = %q{Simple objects from json}
   s.description = %q{Creates Ruby objects from ruby hash-like objects or JSON/XML requested from apis}
 
