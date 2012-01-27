@@ -1,3 +1,3 @@
 module PassiveResource
-  class InvalidSeedlingException < StandardError; end
+  class ParseError < StandardError; end
 end

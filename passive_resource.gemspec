@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ["gradyg@izea.com"]
   s.homepage    = ""
   s.summary     = %q{Simple objects from json}
-  s.description = %q{Creates Ruby objects from JSON requested from apis or hashes}
+  s.description = %q{Creates Ruby objects from ruby hash-like objects or JSON/XML requested from apis}
 
   s.rubyforge_project = "passive_resource"
 

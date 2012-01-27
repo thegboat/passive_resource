@@ -29,6 +29,10 @@ describe PassiveResource::Base, "#new" do
     instance = PassiveResource::Base.new(:name => 'grady')
     instance.respond_to?('name').should eq(true)
   end
+  
+  it "should raise exception for unprocessable objects" do
+    lambda { PassiveResource::Base.new(nil) }.should raise_error(PassiveResource::ParseError)
+  end
 end
   
 describe PassiveResource::Base, "#seedling" do
